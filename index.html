@@ -1,0 +1,355 @@
+<!-- 
+	Name: Elham Jaffar
+	Date: Starting 10/10/2017 To 15/10/2017
+	Project Name: Neighborhood Map
+	Project File: index.html
+	Project Main Purpose: A single-page application featuring a map of my neighborhood
+	Technologies: Google APIs, Knockout Framework 
+	Resources:
+		Map Style: (1) https://mapstyle.withgoogle.com
+		General Style: (1) https://stackoverflow.com/questions/11232627/perfect-100-width-of-parent-container-for-a-bootstrap-input
+		(2) https://stackoverflow.com/questions/13056207/textbox-css-hover-focus
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+	<!-- Link style sheet and bootstrap for resposive design -->
+	<link rel="bootstrap-stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<title> Neighborhood Map Project </title>
+  </head>
+  <body>
+  	<!--View Part: including HTML and Data bind attribute-->
+  	<div class="container">
+  		<div class="side-list text-md-center">
+  			<h3 clss="welcome">Welcome To Elham's Map!</h3>
+  			<div class="row input-text">
+  				<div class="col-md-12">
+					<input type="text" class="input-block-level" placeholder="type text to filter the list view">
+				</div>
+  			</div>
+  			<ul class="list-group" data-bind="foreach: markers">
+  				<li data-bind="foreach: {data: info}"></li>
+  			</ul>
+  		</div>
+	</div>
+	<div id="map">
+	</div> 
+	<script>
+		//Variables
+		var map;
+		//Model part: including objects of location, style and etc
+		//Style the Map, this style has been customied by https://mapstyle.withgoogle.com
+		var mapStyle = [
+		  {
+		    "elementType": "geometry",
+		    "stylers": [
+		      {
+		        "color": "#242f3e"
+		      }
+		    ]
+		  },
+		  {
+		    "elementType": "geometry.fill",
+		    "stylers": [
+		      {
+		        "color": "#4b5c62"
+		      }
+		    ]
+		  },
+		  {
+		    "elementType": "labels.text",
+		    "stylers": [
+		      {
+		        "color": "#ffffff"
+		      }
+		    ]
+		  },
+		  {
+		    "elementType": "labels.text.fill",
+		    "stylers": [
+		      {
+		        "color": "#746855"
+		      }
+		    ]
+		  },
+		  {
+		    "elementType": "labels.text.stroke",
+		    "stylers": [
+		      {
+		        "color": "#242f3e"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "administrative.locality",
+		    "elementType": "labels.text.fill",
+		    "stylers": [
+		      {
+		        "color": "#d59563"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "poi",
+		    "elementType": "labels.text.fill",
+		    "stylers": [
+		      {
+		        "color": "#d59563"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "poi.attraction",
+		    "elementType": "geometry",
+		    "stylers": [
+		      {
+		        "weight": 1.5
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "poi.park",
+		    "elementType": "geometry",
+		    "stylers": [
+		      {
+		        "color": "#263c3f"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "poi.park",
+		    "elementType": "labels.text.fill",
+		    "stylers": [
+		      {
+		        "color": "#6b9a76"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "road",
+		    "elementType": "geometry",
+		    "stylers": [
+		      {
+		        "color": "#38414e"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "road",
+		    "elementType": "geometry.stroke",
+		    "stylers": [
+		      {
+		        "color": "#212a37"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "road",
+		    "elementType": "labels.text.fill",
+		    "stylers": [
+		      {
+		        "color": "#9ca5b3"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "road.arterial",
+		    "elementType": "geometry.fill",
+		    "stylers": [
+		      {
+		        "color": "#929292"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "road.highway",
+		    "elementType": "geometry",
+		    "stylers": [
+		      {
+		        "color": "#746855"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "road.highway",
+		    "elementType": "geometry.stroke",
+		    "stylers": [
+		      {
+		        "color": "#1f2835"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "road.highway",
+		    "elementType": "labels.text.fill",
+		    "stylers": [
+		      {
+		        "color": "#f3d19c"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "road.local",
+		    "elementType": "geometry.fill",
+		    "stylers": [
+		      {
+		        "color": "#ffffff"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "transit",
+		    "elementType": "geometry",
+		    "stylers": [
+		      {
+		        "color": "#2f3948"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "transit.line",
+		    "elementType": "geometry.stroke",
+		    "stylers": [
+		      {
+		        "color": "#d59563"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "transit.station",
+		    "elementType": "labels.text.fill",
+		    "stylers": [
+		      {
+		        "color": "#d59563"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "water",
+		    "elementType": "geometry",
+		    "stylers": [
+		      {
+		        "color": "#17263c"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "water",
+		    "elementType": "labels.text.fill",
+		    "stylers": [
+		      {
+		        "color": "#515c6d"
+		      }
+		    ]
+		  },
+		  {
+		    "featureType": "water",
+		    "elementType": "labels.text.stroke",
+		    "stylers": [
+		      {
+		        "color": "#17263c"
+		      }
+		    ]
+		  }
+		]; //end style map
+		//5 faviourtis location at philadelphia bala cynwyd info
+    	var locations = [
+    			{
+	    			location:{lat: 40.001232, lng: -75.225248},
+					title:'My Home',
+					address:'4700 City Ave, Philadelphia, PA 19131, USA'
+				},
+		        {
+			        location:{lat: 40.002524, lng: -75.222665},
+			    	title:'Boston Market Resutrant',
+					address:'4600 City Ave, Philadelphia, PA 19131, USA'
+				},
+		        {
+		        	location:{lat: 40.003773, lng: -75.223464},
+		    		title:'Bala Cynwyd Shooping Center',
+					address:'121 City Ave, Bala Cynwyd, PA 19004, USA'
+				},
+		        {
+		        	location: {lat: 40.002405, lng: -75.225513},
+		    		title:'La Fitness',
+					address:'175 E City Ave, Bala Cynwyd, PA 19004, USA'
+				},
+		        {
+		        	location: {lat: 40.001083, lng: -75.227809},
+		    		title:'Bala Cynwyd Train Station',
+					address:'Bala Cynwyd, PA, USA'
+				}
+		];//end locaitons
+		
+
+		//Viewmodel part: functions to update the list vuew and markers
+		//Functions
+		function initMap() {
+				// Create a new map in addition, center and zoom as the course showed. The lang and lat is my home address :) 
+				map = new google.maps.Map(document.getElementById('map'), {
+		          center: locations[0].location,
+		          zoom: 16,
+		          styles: mapStyle
+		        });
+		        this.LocationsViewModel();
+
+
+		}
+
+		function LocationsViewModel() {
+			var self = this;
+		    self.markers = ko.observableArray([
+
+		    	{
+		    	marker: new AddMarker(self.locations[0].location, self.locations[0].title), 
+		    	info:self.locations[0].title
+		    	},
+		    	{
+		    	marker: new AddMarker(self.locations[1].location, self.locations[1].title),
+		    	info:self.locations[1].title
+		    	},	
+		    	{
+		    	marker: new AddMarker(self.locations[2].location, self.locations[2].title), 
+		    	info:self.locations[2].title
+		    	},
+		    	{
+		    	marker: new AddMarker(self.locations[3].location, self.locations[3].title), 
+		    	info:self.locations[3].title
+		    	},
+		    	{
+		    	marker: new AddMarker(self.locations[4].location, self.locations[4].title), 
+		    	info:self.locations[4].title
+		    	},
+		    ]);
+
+		    ko.applyBindings(new markers());
+
+		 }
+		
+		function AddMarker(position, title) {
+			  var self = this;
+	          self.marker = ko.observable(new google.maps.Marker({position:position, map: map, title:title}));
+		}
+
+
+
+	</script>
+    <!-- Link the google map and use its library: Google API Key -->
+   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvayfCRVy51r31KqhPbFoEu-tyHwznHc0&v=3&callback=initMap"></script>
+   <!-- link bootstrap javascript -->
+	<script async type="tbootstrap-javascript" src="js/bootstrap.min.js"></script>
+   <!-- Link Knockout Framework -->
+	<script type="text/javascript" src="js/knockout-3.4.2.js"></script>
+    <!--Use webfont loader to load the font faster-->
+	<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+	<script>
+	 WebFont.load({
+	    google: {
+	      families: ['Oswald']
+	    }
+	  });
+	</script>
+ </body>
+</html>
+		   

@@ -1,0 +1,62 @@
+html,
+body {
+font-family: 'Oswald', sans-serif;
+height: 100%;
+margin: 0;
+padding: 0;
+color: #313e41;
+}
+h3{
+
+}
+#map {
+bottom:0px;
+min-height: 100%;
+left: 365px;
+position: absolute;
+right: 0px;
+}
+.side-list{
+background-color: #E6E6E6;
+border:2px solid #E6E6E6;
+float: left;
+outline: 1px solid #c59466;
+outline-offset: -10px;
+line-height: 35px;
+padding: 0px 10px 0px 10px;
+text-align: center;
+width: 340px;
+position: fixed;
+height: 100%;
+}
+.container {
+position: relative;
+}
+.input-block-level {
+  width: 95%;
+  min-height: 28px;   
+  border:1px solid #fff;
+  border-radius: 5px;
+}
+.input-text{
+	padding-top: 30px;
+}
+input[type="text"]:focus{
+outline: none;
+box-shadow: 0px 0px 5px #313e41;
+border:1px solid #c59466;
+border-radius: 5px;
+}
+
+input[type="text"]:hover{
+border: 1px solid #666;
+border-radius: 5px;
+}
+
+input[type="text"]:focus:hover{
+outline: none;
+box-shadow: 0px 0px 5px #c59466;
+border:1px solid #313e41;
+border-radius:5px;
+
+}   
