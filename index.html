@@ -6,19 +6,23 @@
 	Project Main Purpose: A single-page application featuring a map of my neighborhood
 	Technologies: Google APIs, Knockout Framework 
 	Resources:
-		Map Style: (1) https://mapstyle.withgoogle.com
-		General Style: (1) https://stackoverflow.com/questions/11232627/perfect-100-width-of-parent-container-for-a-bootstrap-input
+		Map Style: 
+		(1) https://mapstyle.withgoogle.com
+		General Style: 
+		(1) https://stackoverflow.com/questions/11232627/perfect-100-width-of-parent-container-for-a-bootstrap-input
 		(2) https://stackoverflow.com/questions/13056207/textbox-css-hover-focus
 		(3) https://getbootstrap.com/docs/4.0/components/navbar/
-		Error Solutions: (1)
+		Error Solutions: 
+		(1)
+		(2)
+		(3)
 -->
 <!DOCTYPE html>
 <html>
   <head>
-	<!-- Link style sheet, awsome font for icons and bootstrap for resposive design -->
+	<!-- Link style sheet bootstrap for resposive design -->
 	<link rel="bootstrap-stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
 	<title> Neighborhood Map Project </title>
   </head>
   <body>
@@ -35,17 +39,12 @@
   		<!-- side bar -->
   		<div class="side-list text-md-center">
   			<div class="row">
-  				<div class="col-lg-12">
-  					<div class="input-group">
-						<input type="text" class="form-control" placeholder="type text to filter the list view">
-						<span class="input-group-btn">
-	        				<button class="btn btn-secondary" type="button" title="click to filter"><i class="fa fa-filter fa-2x filter" aria-hidden="true"></i></button>
-	      				</span>
-					</div>
-  				</div>
+  				<div class="col-md-12">
+					<input type="text" id="textToFilter" data-bind="value: filter, valueUpdate: 'afterkeydown'" class="form-control" placeholder="type text to filter the list view">
+				</div>
   			</div>
-  			<ul class="list-group" data-bind="foreach: markers">
-  				<li data-bind="text: info"></li>
+  			<ul class="list-group" data-bind="foreach: filteredList">
+  				<li data-bind="text: title"></li>
   			</ul>
   		</div>
   		<!-- Map Div -->
@@ -55,6 +54,7 @@
 	<script>
 		//Variables
 		var map;
+
 		//Model part: including objects of location, style and etc
 		//Style the Map, this style has been customied by https://mapstyle.withgoogle.com
 		var mapStyle = [
@@ -298,10 +298,14 @@
 					address:'Bala Cynwyd, PA, USA'
 				}
 		];//end locaitons
-		
+		//Markers
+		var markers = [];
 
-		//Viewmodel part: functions to update the list vuew and markers
+		//Viewmodel part: functions to update the list view and markers
 		//Functions
+		/*
+			initMap(): This function to initialize the map 
+		*/
 		function initMap() {
 				// Create a new map in addition, center and zoom as the course showed. The lang and lat is my home address :) 
 				map = new google.maps.Map(document.getElementById('map'), {
@@ -309,49 +313,77 @@
 		          zoom: 16,
 		          styles: mapStyle
 		        });
-		        this.LocationsViewModel();
-
-
+		        ko.applyBindings(new LocationsViewModel());
 		}
+		    
 
-		function LocationsViewModel() {
+		/*
+			LocationsViewModel(): crete marker and put a list data as observable array
+		*/
+		var LocationsViewModel = function () {
 			var self = this;
-		    self.markers = ko.observableArray([
-
-		    	{
-		    	marker: new AddMarker(self.locations[0].location, self.locations[0].title), 
-		    	info:self.locations[0].title
-		    	},
-		    	{
-		    	marker: new AddMarker(self.locations[1].location, self.locations[1].title),
-		    	info:self.locations[1].title
-		    	},	
-		    	{
-		    	marker: new AddMarker(self.locations[2].location, self.locations[2].title), 
-		    	info:self.locations[2].title
-		    	},
-		    	{
-		    	marker: new AddMarker(self.locations[3].location, self.locations[3].title), 
-		    	info:self.locations[3].title
-		    	},
-		    	{
-		    	marker: new AddMarker(self.locations[4].location, self.locations[4].title), 
-		    	info:self.locations[4].title
-		    	},
-		    ]);
-
-		    ko.applyBindings(new markers());
-
-		 }
+		    self.viewLocations = ko.observableArray(locations);
+		    self.newMarkers = ko.observableArray(markers);
+		    //bind filter to filter text
+  			self.filter = ko.observable();
+  			
+			  //Use filteredList to get the updated list
+			  self.filteredList = ko.computed(function () {
+			    var copyArr = [];
+			    var filter = self.filter();
+			    if (filter) {
+			        ko.utils.arrayForEach(self.viewLocations(), function (element) {
+			        	var currentTitle = element.title.toLowerCase();
+			        	var currentText = filter.toLowerCase();
+			            if (currentTitle.indexOf(currentText) !== -1) {
+			                copyArr.push(element);
+			            }
+			        });
+			    } 
+			    else {
+			        copyArr = self.viewLocations();
+			    }
+			    return copyArr;
+			});
+		}
 		
-		function AddMarker(position, title) {
-			  var self = this;
-	          self.marker = ko.observable(new google.maps.Marker({position:position, map: map, title:title, icon:'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF'}));
+		/*
+			AddMarker(): to create a marker
+		*/
+		var AddMarker = function(position, title) {
+	          // Get the position from the location array.
+	          var marker = new google.maps.Marker({
+	          	position:position, 
+	          	map: map, 
+	          	title:title, 
+	          	icon:'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF'});
+	          //push the new marker to the markers 
+	          markers.push(marker);
+	    }
+		/* 
+			removeMarker(): to remove old marker from the map
+		*/
+
+		var removeMarker = function(place) {
+
+			if(place != null) {
+
+		   		place.marker().setMap(null);
+
+			}
+
+		};
+
+		/*
+			function to handle google map error
+		*/
+		function handleError(){
+			alert("There is a problem in loading google map, try gaian !");
 		}
 
-	</script>
-    <!-- Link the google map and use its library: Google API Key -->
-   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvayfCRVy51r31KqhPbFoEu-tyHwznHc0&v=3&callback=initMap"></script>
+   </script>
+   <!-- Link the google map and use its library: Google API Key -->
+   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvayfCRVy51r31KqhPbFoEu-tyHwznHc0&v=3&callback=initMap&onerror=handleError"></script>
    <!-- link bootstrap javascript -->
 	<script async type="tbootstrap-javascript" src="js/bootstrap.min.js"></script>
    <!-- Link Knockout Framework -->
