@@ -9,32 +9,49 @@
 		Map Style: (1) https://mapstyle.withgoogle.com
 		General Style: (1) https://stackoverflow.com/questions/11232627/perfect-100-width-of-parent-container-for-a-bootstrap-input
 		(2) https://stackoverflow.com/questions/13056207/textbox-css-hover-focus
+		(3) https://getbootstrap.com/docs/4.0/components/navbar/
+		Error Solutions: (1)
 -->
 <!DOCTYPE html>
 <html>
   <head>
-	<!-- Link style sheet and bootstrap for resposive design -->
+	<!-- Link style sheet, awsome font for icons and bootstrap for resposive design -->
 	<link rel="bootstrap-stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
 	<title> Neighborhood Map Project </title>
   </head>
   <body>
+	<!-- Navigation Part -->
+	<!-- As a heading, from bootstrap documentation -->
+	<nav class="nav navbar-default navbar-fixed-top">
+		<div class="navbar-header">
+				<span class="h1" class="navbar-brand mb-0">Elham's Map!</span>
+		</div>
+	</nav>
+
   	<!--View Part: including HTML and Data bind attribute-->
   	<div class="container">
+  		<!-- side bar -->
   		<div class="side-list text-md-center">
-  			<h3 clss="welcome">Welcome To Elham's Map!</h3>
-  			<div class="row input-text">
-  				<div class="col-md-12">
-					<input type="text" class="input-block-level" placeholder="type text to filter the list view">
-				</div>
+  			<div class="row">
+  				<div class="col-lg-12">
+  					<div class="input-group">
+						<input type="text" class="form-control" placeholder="type text to filter the list view">
+						<span class="input-group-btn">
+	        				<button class="btn btn-secondary" type="button" title="click to filter"><i class="fa fa-filter fa-2x filter" aria-hidden="true"></i></button>
+	      				</span>
+					</div>
+  				</div>
   			</div>
   			<ul class="list-group" data-bind="foreach: markers">
-  				<li data-bind="foreach: {data: info}"></li>
+  				<li data-bind="text: info"></li>
   			</ul>
   		</div>
+  		<!-- Map Div -->
+		<div id="map">
+		</div> 
 	</div>
-	<div id="map">
-	</div> 
 	<script>
 		//Variables
 		var map;
@@ -257,7 +274,7 @@
     	var locations = [
     			{
 	    			location:{lat: 40.001232, lng: -75.225248},
-					title:'My Home',
+					title:'Mansion at Bala Residence',
 					address:'4700 City Ave, Philadelphia, PA 19131, USA'
 				},
 		        {
@@ -272,7 +289,7 @@
 				},
 		        {
 		        	location: {lat: 40.002405, lng: -75.225513},
-		    		title:'La Fitness',
+		    		title:'La Fitness Gym',
 					address:'175 E City Ave, Bala Cynwyd, PA 19004, USA'
 				},
 		        {
@@ -329,10 +346,8 @@
 		
 		function AddMarker(position, title) {
 			  var self = this;
-	          self.marker = ko.observable(new google.maps.Marker({position:position, map: map, title:title}));
+	          self.marker = ko.observable(new google.maps.Marker({position:position, map: map, title:title, icon:'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF'}));
 		}
-
-
 
 	</script>
     <!-- Link the google map and use its library: Google API Key -->
