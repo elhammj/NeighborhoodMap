@@ -44,7 +44,7 @@
 				</div>
   			</div>
   			<ul class="list-group" data-bind="foreach: filteredList">
-  				<li data-bind="text: title"></li>
+  				<li data-bind="text: title, click: $parent.locationClicked"></li>
   			</ul>
   		</div>
   		<!-- Map Div -->
@@ -54,7 +54,6 @@
 	<script>
 		//Variables
 		var map;
-
 		//Model part: including objects of location, style and etc
 		//Style the Map, this style has been customied by https://mapstyle.withgoogle.com
 		var mapStyle = [
@@ -284,7 +283,7 @@
 				},
 		        {
 		        	location:{lat: 40.003773, lng: -75.223464},
-		    		title:'Bala Cynwyd Shooping Center',
+		    		title:'Bala Cynwyd Shopping Center',
 					address:'121 City Ave, Bala Cynwyd, PA 19004, USA'
 				},
 		        {
@@ -301,7 +300,8 @@
 		//Markers
 		var markers = [];
 
-		//Viewmodel part: functions to update the list view and markers
+
+
 		//Functions
 		/*
 			initMap(): This function to initialize the map 
@@ -313,10 +313,12 @@
 		          zoom: 16,
 		          styles: mapStyle
 		        });
+		        this.AddMarker();
 		        ko.applyBindings(new LocationsViewModel());
 		}
 		    
 
+		//Viewmodel part: functions to update the list view and markers
 		/*
 			LocationsViewModel(): crete marker and put a list data as observable array
 		*/
@@ -326,12 +328,15 @@
 		    self.newMarkers = ko.observableArray(markers);
 		    //bind filter to filter text
   			self.filter = ko.observable();
+  			//For currentSelected
+  			self.currentSelected = ko.observable();
   			
 			  //Use filteredList to get the updated list
 			  self.filteredList = ko.computed(function () {
 			    var copyArr = [];
 			    var filter = self.filter();
 			    if (filter) {
+			    	//Filter the list
 			        ko.utils.arrayForEach(self.viewLocations(), function (element) {
 			        	var currentTitle = element.title.toLowerCase();
 			        	var currentText = filter.toLowerCase();
@@ -339,40 +344,77 @@
 			                copyArr.push(element);
 			            }
 			        });
+			        //Filter the markers
+			        ko.utils.arrayForEach(self.newMarkers(), function (element) {
+   						var currentTitle = element.title.toLowerCase();
+			        	var currentText = filter.toLowerCase();
+			            if (currentTitle.indexOf(currentText) !== -1 ) {
+
+			            	element.setVisible(true);
+		      		  	}
+		      		  	else
+		      		  	{
+		      		  		element.setVisible(false);
+		      		  	}
+		  
+					 });
 			    } 
 			    else {
-			        copyArr = self.viewLocations();
+			        copyArr = self.viewLocations(); //Return the regular markers and locations
+			        ko.utils.arrayForEach(self.newMarkers(), function (element) {
+						element.setVisible(true);
+					});
 			    }
+			    //Indicate wich title has been selected and toggle the pin
+			    self.locationClicked = function(element) {
+			  		element.marker.setAnimation(google.maps.Animation.BOUNCE);
+			  		setTimeout(function () {element.marker.setAnimation(null);}, 700);
+			  	}
 			    return copyArr;
-			});
-		}
+				});
+			}
+
 		
 		/*
 			AddMarker(): to create a marker
 		*/
-		var AddMarker = function(position, title) {
+		var AddMarker = function() {
+
+			var iconUrl = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF';
 	          // Get the position from the location array.
-	          var marker = new google.maps.Marker({
+	       	for (var i=0; i< locations.length; i++)
+	       	{
+	       		var position = locations[i].location;
+	       		var title = locations[i].title;
+	          	var marker = new google.maps.Marker({
 	          	position:position, 
 	          	map: map, 
 	          	title:title, 
-	          	icon:'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF'});
-	          //push the new marker to the markers 
-	          markers.push(marker);
-	    }
-		/* 
-			removeMarker(): to remove old marker from the map
-		*/
-
-		var removeMarker = function(place) {
-
-			if(place != null) {
-
-		   		place.marker().setMap(null);
-
+	          	visible: true,
+	          	icon: iconUrl });
+	         
+	         //Action when the user click on a pin, toggle and chcnage hte color
+	         marker.addListener('click', (function(marker, i) {
+			    return function() {
+			        if (marker.getAnimation() != null) {
+			            marker.setAnimation(null);
+			        } else {
+			            marker.setAnimation(google.maps.Animation.BOUNCE);
+			            marker.setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|C59466');
+			            setTimeout(function () {
+						    marker.setAnimation(null);
+						    marker.setIcon(iconUrl);
+						}, 700);
+			        }
+			        infowindow.setContent(locations[i][0]);
+			        infowindow.open(map, marker);
+			    }
+				})(marker, i));
+				     //push the new marker to the markers 
+				     locations[i].marker = marker; //Add a marker to the list
+				     markers.push(marker);
+				}
 			}
-
-		};
 
 		/*
 			function to handle google map error
