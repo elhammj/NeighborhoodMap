@@ -6,6 +6,14 @@ margin: 0;
 padding: 0;
 color: #222a3e;
 background-color: #E6E6E6;
+width: 100%;
+margin: 0;
+padding: 0;
+}
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
 }
 .nav{
 background-color: #222a3e;
@@ -14,28 +22,29 @@ padding: 15px;
 text-transform: uppercase;
 }
 ul{
-	list-style: none;
-	font-size: 12px;
-	text-align: left;
-	padding-left: 20px;
+list-style: none;
+font-size: 12px;
+text-align: left;
+padding-left: 25px;
 }
-#map {
-bottom:0px;
+#mapContainer {
+float: left;
+top: 0;
 height: 100%;
-background-color: #fff;
-left: 365px;
+width: 70%;
+}
+#map{
+height: 100%;
+width: 70%;
+top: 0;
 position: absolute;
-right: 0px;
 }
 .side-list{
-border:2px solid #E6E6E6;
-float: left;
-line-height: 35px;
-padding: 0px 11px 0px 10px;
-text-align: center;
-width: 340px;
-position: absolute;
 height: 100%;
+width: 30%;
+float: left;
+text-align: center;
+line-height: 40px;
 }
 .container {
 position: relative;

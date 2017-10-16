@@ -12,6 +12,7 @@
 		(1) https://stackoverflow.com/questions/11232627/perfect-100-width-of-parent-container-for-a-bootstrap-input
 		(2) https://stackoverflow.com/questions/13056207/textbox-css-hover-focus
 		(3) https://getbootstrap.com/docs/4.0/components/navbar/
+		(4) https://developers.google.com/maps/documentation/javascript/examples/control-positioning
 		Error Solutions: 
 		(1) https://stackoverflow.com/questions/40489808/knockout-click-binding-with-parameters
 		(2) http://knockoutjs.com/documentation/click-binding.html
@@ -20,6 +21,12 @@
 <!DOCTYPE html>
 <html>
   <head>
+  	<!-- To make sure the browser support the character -->
+	<meta charset=“utf-8”> 
+	<!-- To support the browsers (Internet Explorer) -->
+	<meta http-equiv=“X-UA-Compatible” content=“IE=edge”> 
+	<!-- To support mobile version and responsive --> 
+	<meta name=“viewpoint” content=“width=device-width, initial-scale=1”>
 	<!-- Link style sheet bootstrap for resposive design -->
 	<link rel="bootstrap-stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
@@ -36,9 +43,7 @@
 
   	<!--View Part: including HTML and Data bind attribute-->
   	<div class="container">
-  		<div class="row">
   		<!-- side bar -->
-  		<div class="col-md-3">
   		<div class="side-list text-md-center">
   			<div class="row">
   				<div class="col-md-12">
@@ -49,15 +54,11 @@
   				<li data-bind="text: title, click: $parent.locationClicked"></li>
   			</ul>
   		</div>
-  	</div>
   		<!-- Map Div -->
-  		<div class="col-md-9">
-  		<div class="mapContainer">
-		<div id="map">
-		</div>
-	</div>
+  		<div id="mapContainer">
+			<div id="map">
+			</div>
 		</div> 
-	</div>
 	</div>
 	<script>
 		//Variables
@@ -337,7 +338,22 @@
 				map = new google.maps.Map(document.getElementById('map'), {
 		          center: locations[0].location,
 		          zoom: 14,
-		          styles: mapStyle
+		          styles: mapStyle,
+		          mapTypeControl: true,
+			      mapTypeControlOptions: {
+			          style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+			          position: google.maps.ControlPosition.TOP_CENTER
+			      },
+			      zoomControl: true,
+			      zoomControlOptions: {
+			          position: google.maps.ControlPosition.LEFT_CENTER
+			      },
+			      scaleControl: true,
+			      streetViewControl: true,
+			      streetViewControlOptions: {
+			          position: google.maps.ControlPosition.LEFT_TOP
+			      },
+			      fullscreenControl: true
 		        });
 		        this.AddMarker(); //To add marker to each location
 		        ko.applyBindings(new LocationsViewModel());
