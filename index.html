@@ -36,7 +36,9 @@
 
   	<!--View Part: including HTML and Data bind attribute-->
   	<div class="container">
+  		<div class="row">
   		<!-- side bar -->
+  		<div class="col-md-3">
   		<div class="side-list text-md-center">
   			<div class="row">
   				<div class="col-md-12">
@@ -47,9 +49,15 @@
   				<li data-bind="text: title, click: $parent.locationClicked"></li>
   			</ul>
   		</div>
+  	</div>
   		<!-- Map Div -->
+  		<div class="col-md-9">
+  		<div class="mapContainer">
 		<div id="map">
+		</div>
+	</div>
 		</div> 
+	</div>
 	</div>
 	<script>
 		//Variables
@@ -295,6 +303,27 @@
 		        	location: {lat: 40.001083, lng: -75.227809},
 		    		title:'Bala Cynwyd Train Station',
 					address:'Bala Cynwyd, PA, USA'
+				},
+				{
+
+		        	location: {lat: 39.994996, lng: -75.240123},
+		    		title:'Saint Joseph\'s University',
+					address:'5600 City Ave, Philadelphia, PA 19131, USA'
+				},
+				{
+					location: {lat: 39.989805, lng: -75.249998},
+					title: 'Overbrook',
+					address: '6260 City Ave, Philadelphia, PA 19131, USA'
+				},
+				{
+					location: {lat: 39.986137, lng: -75.247553},
+					title: 'Star Fusion',
+					address: '2013 N 63rd St, Philadelphia, PA 19151, USA'
+				},
+				{
+					location: {lat: 39.994346, lng: -75.238518},
+					title: 'Francis A. Drexel Library',
+					address: '5500 Rural Ln, Philadelphia, PA 19131, USA'
 				}
 		];//end locaitons
 		//Default icon for marker
@@ -307,7 +336,7 @@
 				// Create a new map in addition, center and zoom as the course showed. The lang and lat is my home address :) 
 				map = new google.maps.Map(document.getElementById('map'), {
 		          center: locations[0].location,
-		          zoom: 16,
+		          zoom: 14,
 		          styles: mapStyle
 		        });
 		        this.AddMarker(); //To add marker to each location
