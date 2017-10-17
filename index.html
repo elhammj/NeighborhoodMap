@@ -476,7 +476,7 @@
 				        var wikiContent = response[2][0]; //To get a first part of the chosen url
 				        //Wikipedia API returns undefined 
 				        if (wikiLocURL === undefined) {
-				          infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + 'No Wikipedia data for this location' + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
+				          infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + 'No Wikipedia data for this location' + '</p> </br> <a href="https://en.wikipedia.org/wiki/Main_Page" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
 				        } else {
 				          infoWindow.marker = marker;
 				          infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + wikiContent + "...." + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia to Read More' + '</a> </p> </div>');
@@ -484,7 +484,7 @@
 				        infoWindow.open(map, marker);
 				        //When Wikipedia Return 
 				      }).error(function() {
-				        infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + 'No Wikipedia data for this location' + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
+				        infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + 'No Wikipedia data for this location' + '</p> </br> <a href=href="https://en.wikipedia.org/wiki/Main_Page" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
 				        infoWindow.open(map, marker);
 
 				})
