@@ -33,15 +33,13 @@
 	<title> Neighborhood Map Project </title>
   </head>
   <body>
-	<!-- Navigation Part -->
-	<!-- As a heading, from bootstrap documentation -->
+  	<!--View Part: including HTML and Data bind attribute
+		Navigation Part As a heading, from bootstrap documentation -->
 	<nav class="nav navbar-default navbar-fixed-top">
 		<div class="navbar-header">
 				<span class="h1" class="navbar-brand mb-0">Elham's Map!</span>
 		</div>
 	</nav>
-
-  	<!--View Part: including HTML and Data bind attribute-->
   	<div class="container">
   		<!-- side bar -->
   		<div class="side-list text-md-center">
@@ -60,11 +58,18 @@
 			</div>
 		</div> 
 	</div>
+	<!-- Java script part -->
 	<script>
-		//Variables
+
+		/*
+			Model part: including objects of location, style and etc
+		*/
+
+
+		/* 
+			Variables: (1) style the map, (2) add locaitons info as array of objects, (3) default icon for map pin (4) decleare infowindow 
+		*/
 		var map;
-		//Model part: including objects of location, style and etc
-		//Style the Map, this style has been customied by https://mapstyle.withgoogle.com
 		var mapStyle = [
 		  {
 		    "elementType": "geometry",
@@ -277,33 +282,32 @@
 		      }
 		    ]
 		  }
-		]; //end style map
-		//5 faviourtis location at philadelphia bala cynwyd info
+		]; 
     	var locations = [
     			{
-	    			location:{lat: 40.001232, lng: -75.225248},
-					title:'Mansion at Bala Residence',
-					address:'4700 City Ave, Philadelphia, PA 19131, USA'
+	    			location:{lat: 39.956623, lng: -75.189933},
+					title:'Drexel University',
+					address:'Lancaster Walk, Philadelphia, PA 19104, USA'
 				},
 		        {
-			        location:{lat: 40.002524, lng: -75.222665},
-			    	title:'Boston Market Resturant',
-					address:'4600 City Ave, Philadelphia, PA 19131, USA'
+			        location:{lat: 39.952220, lng: -75.193204},
+			    	title:'University of Pennsylvania',
+					address:'3405 Woodland Walk, Philadelphia, PA 19104, USA'
 				},
 		        {
-		        	location:{lat: 40.003773, lng: -75.223464},
-		    		title:'Bala Cynwyd Shopping Center',
-					address:'121 City Ave, Bala Cynwyd, PA 19004, USA'
+		        	location:{lat: 39.948890, lng: -75.155950},
+		    		title:'Jefferson University',
+					address:'130 S 9th St, Philadelphia, PA 19107, USA'
 				},
 		        {
-		        	location: {lat: 40.002405, lng: -75.225513},
-		    		title:'La Fitness Gym',
-					address:'175 E City Ave, Bala Cynwyd, PA 19004, USA'
+		        	location: {lat: 39.946821, lng: -75.207095},
+		    		title:'University of the Sciences in Philadelphia',
+					address:'4217-4231 Woodland Ave, Philadelphia, PA 19104, USA'
 				},
 		        {
-		        	location: {lat: 40.001083, lng: -75.227809},
-		    		title:'Bala Cynwyd Train Station',
-					address:'Bala Cynwyd, PA, USA'
+		        	location: {lat: 40.005195, lng: -75.216562},
+		    		title:'Philadelphia College of Osteopathic Medicine',
+					address:'Evans Hall, Philadelphia, PA 19131, USA'
 				},
 				{
 
@@ -312,32 +316,35 @@
 					address:'5600 City Ave, Philadelphia, PA 19131, USA'
 				},
 				{
-					location: {lat: 39.989805, lng: -75.249998},
-					title: 'Overbrook',
-					address: '6260 City Ave, Philadelphia, PA 19131, USA'
+					location: {lat: 39.981194, lng: -75.155353},
+					title: 'Temple University',
+					address: '1801 N Broad St, Philadelphia, PA 19122, USA'
 				},
 				{
-					location: {lat: 39.986137, lng: -75.247553},
-					title: 'Star Fusion',
-					address: '2013 N 63rd St, Philadelphia, PA 19151, USA'
+					location: {lat: 40.038608, lng: -75.156632},
+					title: 'La Salle University',
+					address: 'Logan/ Ogontz/ Fern Rock, Philadelphia, PA, USA'
 				},
 				{
 					location: {lat: 39.994346, lng: -75.238518},
 					title: 'Francis A. Drexel Library',
 					address: '5500 Rural Ln, Philadelphia, PA 19131, USA'
 				}
-		];//end locaitons
-		//Default icon for marker
-		var iconUrl = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF';
-		//Functions
+		];
+		var iconUrl = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF7E72';
+		var infoWindow;
+
+
+
 		/*
-			initMap(): This function to initialize the map 
+			initMap(): This function to initialize the map and give a center point
+			Also, add controls like zoom, street view and scale
 		*/
 		function initMap() {
-				// Create a new map in addition, center and zoom as the course showed. The lang and lat is my home address :) 
+				
 				map = new google.maps.Map(document.getElementById('map'), {
-		          center: locations[0].location,
-		          zoom: 14,
+		          center: locations[6].location,
+		          zoom: 12,
 		          styles: mapStyle,
 		          mapTypeControl: true,
 			      mapTypeControlOptions: {
@@ -355,14 +362,18 @@
 			      },
 			      fullscreenControl: true
 		        });
-		        this.AddMarker(); //To add marker to each location
-		        ko.applyBindings(new LocationsViewModel());
+
+		        this.AddMarker(); //To add marker to each location as a key and value
+		        ko.applyBindings(new LocationsViewModel()); //Binding the view model 
 		}
 		    
 
-		//Viewmodel part: functions to update the list view and markers
 		/*
-			LocationsViewModel(): crete marker and put a list data as observable array
+			Viewmodel part: functions to update the list view and markers
+			LocationsViewModel(): crete marker and put a list data as an observable array
+			Functions:
+			(1) filter the list of lcoations and marker synchronously 
+			(2) animate the marker and show the infowindow when one of the list item is clicked
 		*/
 		var LocationsViewModel = function () {
 			var self = this;
@@ -381,12 +392,13 @@
 			        ko.utils.arrayForEach(self.viewLocations(), function (element) {
 			        	var currentTitle = element.title.toLowerCase();
 			        	var currentText = filter.toLowerCase();
-			            if (currentTitle.indexOf(currentText) !== -1) {
+			        	//Search allows the user to find a locaiton that contains this keyword
+			            if (currentTitle.indexOf(currentText) !== -1) { 
 			                copyArr.push(element);
 			                element.marker.setVisible(true);
 			            }
 			            else{
-			            	element.marker.setVisible(false);
+			            	element.marker.setVisible(false);//set false to hide the marker during filtering 
 			            }
 			        });
 			    } 
@@ -396,64 +408,110 @@
 					 	element.marker.setVisible(true);
 		      		 });
 			    } 
-			    //Indicate wich title has been selected and toggle the pin
+			    //Indicate which title has been selected and show infowwindow with toggling the marker by calling AddAnimation function 
 			    self.locationClicked = function(element) {
 			    	if (element.marker.getAnimation() != null) {
 			            element.marker.setAnimation(null);
 			        } else {
-			  			element.marker.setAnimation(google.maps.Animation.BOUNCE);
-			  			 element.marker.setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF803B');
-			  			setTimeout(function () {
-							element.marker.setIcon(iconUrl);
-			  				element.marker.setAnimation(null);}, 700);
+			  			AddInfo(element.marker, infoWindow);
+			  			AddAnimation(element.marker,"FFFFFF");
 			  		}
 			  	}
 			    return copyArr;
-				
-			});
+			}); 
 		}
 
 		
 		/*
-			AddMarker(): to create a marker
+			AddMarker(): It is a function to to create a marker, animate a marker when it is clicked and show a custom infowindow by calling AddAnimation and AddInfo functions. 
 		*/
 		var AddMarker = function() {
 
-	          // Get the position from the location array.
+			//create infoWindow and set a max width
+			infoWindow = new google.maps.InfoWindow({
+				maxWidth: 180
+			});
+
+	        // Get the position and title from the location array.
 	       	for (var i=0; i< locations.length; i++)
 	       	{
 	       		var position = locations[i].location;
 	       		var title = locations[i].title;
+	       		var formatAddress = locations[i].address;
 	          	var marker = new google.maps.Marker({
 	          	position:position, 
 	          	map: map, 
+	          	address: formatAddress,
 	          	title:title, 
 	          	visible: true,
 	          	icon: iconUrl });
+	        
 	         
-	         //Action when the user click on a pin, toggle and chcnage hte color
+	         //Action when the user click on a pin, toggle and chcnage hte color by calling AddInfo and AddAnimation functions
 	         marker.addListener('click', (function(marker) {
-			    return function() {
-			        if (marker.getAnimation() != null) {
-			            marker.setAnimation(null);
+				    return function() {
+				    	AddAnimation(marker,"FFDF4C");
+				        AddInfo(marker, infoWindow);    
+				    }
+				})(marker));
+				     locations[i].marker = marker; //Add a marker to the locaiton object as an attribute
+				}
+			}
+
+
+			/*
+				API Part To Add Info To Infowidow
+				ADDInfo: It is a function to add a descreption to the marker's infowindow
+			*/
+		function AddInfo(marker, infoWindow){	
+				//Here is the link, we just pass the marker title	        	
+	        	var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title  + '&format=json&callback=wikiCallback';
+	        		         	
+
+	        	//Ajax request to retreive data from wikipedia page
+	        	$.ajax({
+	        		url: wikiUrl,
+	        		dataType: "jsonp" }).success(function(response) {
+
+					        var wikiLocURL = response[3][0]; //To get first url
+					        var wikiContent = response[2][0]; //To get a first part of the chosen url
+					        //Wikipedia API returns undefined 
+					        if (wikiLocURL === undefined) {
+					          infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + 'No Wikipedia data for this location' + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
+					        } else {
+					          infoWindow.marker = marker;
+					          infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + wikiContent + "...." + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia to Read More' + '</a> </p> </div>');
+					     	}
+					        infoWindow.open(map, marker);
+					        //When Wikipedia Return 
+					      }).error(function() {
+					        infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + 'No Wikipedia data for this location' + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
+					        infoWindow.open(map, marker);
+
+					})
+
+	       		 }
+
+		/*
+			AddAnimation: It is a function to add a animation and change color when the it is called
+		*/
+
+	    function AddAnimation(marker,color){
+	    	 if (marker.getAnimation() != null) {
+		            marker.setAnimation(null);
 			        } else {
-			            marker.setAnimation(google.maps.Animation.BOUNCE);
-			            marker.setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|C59466');
+			        	marker.setAnimation(google.maps.Animation.BOUNCE);
+		           		marker.setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + color);
 			            setTimeout(function () {
 						    marker.setAnimation(null);
 						    marker.setIcon(iconUrl);
 						}, 700);
 			        }
-			        infowindow.setContent("Hi");
-			        infowindow.open(map, marker);
-			    }
-				})(marker));
-				     locations[i].marker = marker; //Add a marker to the locaiton object
-				}
-			}
+	    }
+			
 
 		/*
-			function to handle google map error
+			handleError: It is a function to handle google map error
 		*/
 		function handleError(){
 			alert("There is a problem in loading google map, try gaian !");
@@ -463,7 +521,9 @@
    <!-- Link the google map and use its library: Google API Key -->
    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvayfCRVy51r31KqhPbFoEu-tyHwznHc0&v=3&callback=initMap&onerror=handleError"></script>
    <!-- link bootstrap javascript -->
-	<script async type="tbootstrap-javascript" src="js/bootstrap.min.js"></script>
+	<script async type="javascript" src="js/bootstrap.min.js"></script>
+	<!-- link jQuery javascript -->
+	<script async src="js/jQuery.js"></script>
    <!-- Link Knockout Framework -->
 	<script type="text/javascript" src="js/knockout-3.4.2.js"></script>
     <!--Use webfont loader to load the font faster-->

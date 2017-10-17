@@ -76,3 +76,13 @@ border:1px solid #313e41;
 border-radius:5px;
 
 }   
+#info{
+	background-color: #E6E6E6;
+	text-align: center;
+	padding: 20px 20px 20px 20px;
+	color: #222a3e;
+	border: 1px solid #222a3e;
+}
+a{
+	color: #FF7E72;
+}
