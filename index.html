@@ -331,7 +331,7 @@
 					address: '5500 Rural Ln, Philadelphia, PA 19131, USA'
 				}
 		];
-		var iconUrl = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF7E72';
+		var iconUrl = 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF7E72';
 		var infoWindow;
 
 
@@ -499,7 +499,7 @@
 		            marker.setAnimation(null);
 			        } else {
 			        	marker.setAnimation(google.maps.Animation.BOUNCE);
-		           		marker.setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + color);
+		           		marker.setIcon('https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + color);
 			            setTimeout(function () {
 						    marker.setAnimation(null);
 						    marker.setIcon(iconUrl);
@@ -523,7 +523,7 @@
 	<!-- link jQuery javascript -->
 	<script async src="js/jQuery.js"></script>
    <!-- Link Knockout Framework -->
-	<script type="text/javascript" src="js/knockout-3.4.2.js"></script>
+	<script async type="text/javascript" src="js/knockout-3.4.2.js"></script>
     <!--Use webfont loader to load the font faster-->
 	<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
 	<script>
