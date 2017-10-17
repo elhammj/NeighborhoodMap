@@ -428,7 +428,7 @@
 		var AddMarker = function() {
 
 			//create infoWindow and set a max width
-			infoWindow = new google.maps.InfoWindow({
+					infoWindow = new google.maps.InfoWindow({
 				maxWidth: 180
 			});
 
@@ -455,8 +455,7 @@
 				    }
 				})(marker));
 				     locations[i].marker = marker; //Add a marker to the locaiton object as an attribute
-				}
-			}
+			}}
 
 
 			/*
@@ -464,33 +463,32 @@
 				ADDInfo: It is a function to add a descreption to the marker's infowindow
 			*/
 		function AddInfo(marker, infoWindow){	
-				//Here is the link, we just pass the marker title	        	
-	        	var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title  + '&format=json&callback=wikiCallback';
-	        		         	
+			//Here is the link, we just pass the marker title	        	
+        	var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title  + '&format=json&callback=wikiCallback';
+        		         	
 
-	        	//Ajax request to retreive data from wikipedia page
-	        	$.ajax({
-	        		url: wikiUrl,
-	        		dataType: "jsonp" }).success(function(response) {
+        	//Ajax request to retreive data from wikipedia page
+        	$.ajax({
+        		url: wikiUrl,
+        		dataType: "jsonp" }).success(function(response) {
 
-					        var wikiLocURL = response[3][0]; //To get first url
-					        var wikiContent = response[2][0]; //To get a first part of the chosen url
-					        //Wikipedia API returns undefined 
-					        if (wikiLocURL === undefined) {
-					          infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + 'No Wikipedia data for this location' + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
-					        } else {
-					          infoWindow.marker = marker;
-					          infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + wikiContent + "...." + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia to Read More' + '</a> </p> </div>');
-					     	}
-					        infoWindow.open(map, marker);
-					        //When Wikipedia Return 
-					      }).error(function() {
-					        infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + 'No Wikipedia data for this location' + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
-					        infoWindow.open(map, marker);
+				        var wikiLocURL = response[3][0]; //To get first url
+				        var wikiContent = response[2][0]; //To get a first part of the chosen url
+				        //Wikipedia API returns undefined 
+				        if (wikiLocURL === undefined) {
+				          infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + 'No Wikipedia data for this location' + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
+				        } else {
+				          infoWindow.marker = marker;
+				          infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + wikiContent + "...." + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia to Read More' + '</a> </p> </div>');
+				     	}
+				        infoWindow.open(map, marker);
+				        //When Wikipedia Return 
+				      }).error(function() {
+				        infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + 'No Wikipedia data for this location' + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
+				        infoWindow.open(map, marker);
 
-					})
-
-	       		 }
+				})
+	    }
 
 		/*
 			AddAnimation: It is a function to add a animation and change color when the it is called
