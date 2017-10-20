@@ -352,10 +352,10 @@ var LocationsViewModel = function () {
 	  			AddInfo(element.marker, infoWindow);
 	  			AddAnimation(element.marker,"FFFFFF");
 	  		}
-	  	}
+	  	};
 	    return copyArr;
 	}); 
-}
+};
 
 
 /*
@@ -364,9 +364,19 @@ var LocationsViewModel = function () {
 var AddMarker = function() {
 
 	//create infoWindow and set a max width
-			infoWindow = new google.maps.InfoWindow({
+	infoWindow = new google.maps.InfoWindow({
 		maxWidth: 200
 	});
+
+	var marker;
+	//Action when the user click on a pin, animate and change the color by calling AddInfo and AddAnimation functions
+	function AddAnimationAndInfo(marker) {
+  	return function(){
+      	map.panTo(marker.position); //Zoom to the current marker, when it is clicked   
+		AddAnimation(marker,"FFDF4C");
+		AddInfo(marker, infoWindow); 
+	  };
+	}
 
     // Get the position and title from the location array.
    	for (var i=0; i< locations.length; i++)
@@ -374,25 +384,17 @@ var AddMarker = function() {
    		var position = locations[i].location;
    		var title = locations[i].title;
    		var formatAddress = locations[i].address;
-      	var marker = new google.maps.Marker({
-      	position:position, 
+      	marker = new google.maps.Marker({
+      	position:new google.maps.LatLng(position.lat, position.lng), 
       	map: map, 
       	address: formatAddress,
       	title:title, 
       	visible: true,
       	icon: iconUrl });
-    
-     
-     //Action when the user click on a pin, animate and chcnage hte color by calling AddInfo and AddAnimation functions
-     marker.addListener('click', (function(marker) {
-		    return function() {
-		    	map.panTo(marker.position); //Zoom to the current marker, when it is clicked   
-		    	AddAnimation(marker,"FFDF4C");
-		        AddInfo(marker, infoWindow); 
-		    }
-		})(marker));
-		     locations[i].marker = marker; //Add a marker to the locaiton object as an attribute
-	}}
+      	marker.addListener("click", AddAnimationAndInfo(marker), false); //Add Info and Animation to each marker
+    	locations[i].marker = marker; //Add a marker to the locaiton object as an attribute
+	} 
+};
 
 
 /*
@@ -426,7 +428,7 @@ function AddInfo(marker, infoWindow){
 		      }).error(function() {
 		        infoWindow.setContent('<div id="info">' + '<h6>' + marker.title + '</h6></br>' + '<h8>' + marker.address + '</h8> </br> </br> <p>' + '*** Error while retreving wikipedia data ***' + '</p> </br> <a href=href="https://en.wikipedia.org/wiki/Main_Page" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
 		        infoWindow.open(map, marker);
-		})
+		});
 }
 
 /*
@@ -434,7 +436,7 @@ function AddInfo(marker, infoWindow){
 */
 
 function AddAnimation(marker,color){
-	 if (marker.getAnimation() != null) {
+	 if (marker.getAnimation() !== null) {
             marker.setAnimation(null);
 	        } else {
 	        	marker.setAnimation(google.maps.Animation.BOUNCE);
