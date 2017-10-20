@@ -459,13 +459,13 @@
 			}}
 
 
-			/*
-				API Part To Add Info To Infowidow
-				ADDInfo: It is a function to add a descreption to the marker's infowindow
-				I got the idea about how to set the content from wikipedia (https://github.com/erikaleigh/udacity-neighbourhood-map/blob/master/js/map.js) 
-				However; I have wrttien the code from my understanding and implemted that inorder make it works with my other functions. The idea was about handling the return data. 
+		/*
+			API Part To Add Info To Infowidow
+			ADDInfo: It is a function to add a descreption to the marker's infowindow
+			I got the idea about how to set the content from wikipedia (https://github.com/erikaleigh/udacity-neighbourhood-map/blob/master/js/map.js) 
+			However; I have wrttien the code from my understanding and implemted that inorder make it works with my other functions. The idea was about handling the return data. 
 
-			*/
+		*/
 		function AddInfo(marker, infoWindow){	
 			//Here is the link, we just pass the marker title	        	
         	var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title  + '&format=json&callback=wikiCallback';
@@ -518,7 +518,9 @@
 			alert("There is a problem in loading google map, try gaian !");
 		}
 
-		/* function to control the toggle, to be responsive with small screen */
+		/* 
+			showSideBar: It is a function to control the toggle, to be responsive with small screen 
+		*/
 		function showSideBar() {
 			if (document.getElementById('sidebar').style.display == 'none'){
 					document.getElementById('sidebar').style.width = "30%";
