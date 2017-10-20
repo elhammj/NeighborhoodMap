@@ -26,6 +26,8 @@ It is a Udacity project to practice MVVM pattern (Model-View-ViewModel) and API.
 
 * All the marker's infowindow information has been retrieved by using Wikipedia API. 
 
+<img src="images/info.png" width="70%">
+
 You can find a live version here: [Neighborhood Map](https://elhammj.github.io/NeighborhoodMap/)
 
 ## Technologies
