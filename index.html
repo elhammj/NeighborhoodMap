@@ -28,7 +28,7 @@
 	<!-- To support mobile version and responsive --> 
 	<meta name=“viewpoint” content=“width=device-width, initial-scale=1”>
 	<!-- Link style sheet bootstrap for resposive design -->
-	<link rel="bootstrap-stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<title> Neighborhood Map Project </title>
   </head>
@@ -37,34 +37,39 @@
 		Navigation Part As a heading, from bootstrap documentation -->
 	<nav class="nav navbar-default navbar-fixed-top">
 		<div class="navbar-header">
-				<span class="h1" class="navbar-brand mb-0">Elham's Map!</span>
+				<span id="subject" class="navbar-brand mb-0">Philadelphia Universities and Libraries</span>
 		</div>
+				<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 	</nav>
-  	<div class="container">
-  		<!-- side bar -->
-  		<div class="side-list text-md-center">
-  			<div class="row">
-  				<div class="col-md-12">
-					<input type="text" id="textToFilter" data-bind="value: filter, valueUpdate: 'afterkeydown'" class="form-control" placeholder="type text to filter the list view">
+  	<div class="container-fluid">
+	  	<div class="row" id="all">
+	  		<!-- side bar -->
+	  		<div class="col-md-3">
+		  		<div class="side-list text-md-center" id="sidebar">
+		  			<div class="row">
+		  				<div class="col-md-12">
+							<input type="text" id="textToFilter" data-bind="value: filter, valueUpdate: 'afterkeydown'" class="form-control" placeholder="type text to filter the list">
+						</div>
+		  			</div>
+		  			<ul class="list-group" data-bind="foreach: filteredList">
+		  				<p data-bind="text: title, click: $parent.locationClicked"></p>
+		  			</ul>
+	  			</div>
+	  		</div>
+	  		<!-- Map Div -->
+	  		<div class="col-md-9" id="mapCol">
+				<div id="map">
 				</div>
-  			</div>
-  			<ul class="list-group" data-bind="foreach: filteredList">
-  				<p data-bind="text: title, click: $parent.locationClicked"></p>
-  			</ul>
-  		</div>
-  		<!-- Map Div -->
-  		<div id="mapContainer">
-			<div id="map">
 			</div>
-		</div> 
+		</div>
 	</div>
 	<!-- Java script part -->
 	<script>
-
 		/*
 			Model part: including objects of location, style and etc
 		*/
-
 
 		/* 
 			Variables: (1) style the map, (2) add locaitons info as array of objects, (3) default icon for map pin (4) decleare infowindow 
@@ -408,11 +413,12 @@
 					 	element.marker.setVisible(true);
 		      		 });
 			    } 
-			    //Indicate which title has been selected and show infowwindow with toggling the marker by calling AddAnimation function 
+			    //Indicate which title has been selected and show infowwindow with animating the marker by calling AddAnimation function 
 			    self.locationClicked = function(element) {
 			    	if (element.marker.getAnimation() != null) {
 			            element.marker.setAnimation(null);
 			        } else {
+			        	map.panTo(element.marker.position); //Zoom to the current marker, when it is clicked  
 			  			AddInfo(element.marker, infoWindow);
 			  			AddAnimation(element.marker,"FFFFFF");
 			  		}
@@ -429,7 +435,7 @@
 
 			//create infoWindow and set a max width
 					infoWindow = new google.maps.InfoWindow({
-				maxWidth: 180
+				maxWidth: 200
 			});
 
 	        // Get the position and title from the location array.
@@ -447,11 +453,12 @@
 	          	icon: iconUrl });
 	        
 	         
-	         //Action when the user click on a pin, toggle and chcnage hte color by calling AddInfo and AddAnimation functions
+	         //Action when the user click on a pin, animate and chcnage hte color by calling AddInfo and AddAnimation functions
 	         marker.addListener('click', (function(marker) {
 				    return function() {
+				    	map.panTo(marker.position); //Zoom to the current marker, when it is clicked   
 				    	AddAnimation(marker,"FFDF4C");
-				        AddInfo(marker, infoWindow);    
+				        AddInfo(marker, infoWindow); 
 				    }
 				})(marker));
 				     locations[i].marker = marker; //Add a marker to the locaiton object as an attribute
@@ -461,6 +468,9 @@
 			/*
 				API Part To Add Info To Infowidow
 				ADDInfo: It is a function to add a descreption to the marker's infowindow
+				I got the idea about how to set the content from wikipedia (https://github.com/erikaleigh/udacity-neighbourhood-map/blob/master/js/map.js) 
+				However; I have wrttien the cod efrom my understanding and implemted to work with my other functions
+
 			*/
 		function AddInfo(marker, infoWindow){	
 			//Here is the link, we just pass the marker title	        	
@@ -476,17 +486,16 @@
 				        var wikiContent = response[2][0]; //To get a first part of the chosen url
 				        //Wikipedia API returns undefined 
 				        if (wikiLocURL === undefined) {
-				          infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + '*** No Wikipedia data for this location ***' + '</p> </br> <a href="https://en.wikipedia.org/wiki/Main_Page" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
-				        } else {
+				          infoWindow.setContent('<div id="info">' + '<h6>' + marker.title + '</h6></br>' + '<h8>' + marker.address + '</h8> </br></br> <p>' + '*** No Wikipedia data for this location ***' + '</p> </br> <a href="https://en.wikipedia.org/wiki/Main_Page" target="blank">' + 'Visit Wikipedia to Search' + '</a> </p> </div>');
+				        } else { //when it is successful and data returned
 				          infoWindow.marker = marker;
-				          infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + wikiContent + "...." + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia to Read More' + '</a> </p> </div>');
+				          infoWindow.setContent('<div id="info">' + '<h6>' + marker.title + '</h6></br>' + '<h8>' + marker.address + '</h8> </br> </br> <p>' + wikiContent + "...." + '</p> </br> <a href="' + wikiLocURL + '" target="blank">' + 'Visit Wikipedia to Read More' + '</a> </p> </div>');
 				     	}
 				        infoWindow.open(map, marker);
 				        //When Wikipedia Return 
 				      }).error(function() {
-				        infoWindow.setContent('<div id="info">' + '<h3>' + marker.title + '</h3></br>' + '<h5>' + marker.address + '</h5> </br> <p>' + '*** No Wikipedia data for this location ***' + '</p> </br> <a href=href="https://en.wikipedia.org/wiki/Main_Page" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
+				        infoWindow.setContent('<div id="info">' + '<h6>' + marker.title + '</h6></br>' + '<h8>' + marker.address + '</h8> </br> </br> <p>' + '*** Error while retreving wikipedia data ***' + '</p> </br> <a href=href="https://en.wikipedia.org/wiki/Main_Page" target="blank">' + 'Visit Wikipedia' + '</a> </p> </div>');
 				        infoWindow.open(map, marker);
-
 				})
 	    }
 

@@ -25,37 +25,46 @@ ul{
 list-style: none;
 font-size: 12px;
 text-align: left;
-padding-left: 25px;
-}
-#mapContainer {
-float: left;
-top: 0;
-height: 100%;
-width: 70%;
+padding-left: 30px;
 }
 #map{
 height: 100%;
-width: 70%;
+width: 100%;
 top: 0;
 position: absolute;
 }
 .side-list{
 height: 100%;
-width: 30%;
 float: left;
 text-align: center;
-line-height: 40px;
+line-height: 15px;
+position: absolute;
 }
-.container {
+.container-fluid {
 position: relative;
 height:100%;
 }
+.all{
+position: relative;
+height:100%;
+width:100%;
+}
+#mapCol
+{
+float: left;
+top: 0;
+height: 100%;
+bottom:0;
+right:0;
+position: absolute;
+}
 .form-control{
-width: 90%;
 min-height: 28px;   
 border:1px solid #fff;
 border-radius: 5px;
 margin-top: 10px;
+margin-bottom: 30px;
+font-size: 10px;
 }
 input[type="text"]:focus{
 outline: none;
@@ -85,4 +94,7 @@ border-radius:5px;
 }
 a{
 	color: #FF7E72;
+}
+#subject{
+	font-size: 16px;
 }
