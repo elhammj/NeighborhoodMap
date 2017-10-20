@@ -409,7 +409,7 @@
 			    } 
 			    //Indicate which title has been selected and show infowwindow with animating the marker by calling AddAnimation function 
 			    self.locationClicked = function(element) {
-			    	if (element.marker.getAnimation() != null) {
+			    	if (element.marker.getAnimation() !== null) {
 			            element.marker.setAnimation(null);
 			        } else {
 			        	map.panTo(element.marker.position); //Zoom to the current marker, when it is clicked  
