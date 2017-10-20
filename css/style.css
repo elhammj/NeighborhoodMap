@@ -38,6 +38,7 @@ height: 100%;
 float: left;
 text-align: center;
 line-height: 15px;
+padding-left: 15px;
 position: absolute;
 }
 .container-fluid {
@@ -54,12 +55,14 @@ width:100%;
 float: left;
 top: 0;
 height: 100%;
+width: 100%;
 bottom:0;
 right:0;
 position: absolute;
 }
 .form-control{
-min-height: 28px;   
+min-height: 28px; 
+width: 80%;  
 border:1px solid #fff;
 border-radius: 5px;
 margin-top: 10px;
@@ -97,4 +100,7 @@ a{
 }
 #subject{
 	font-size: 16px;
+}
+#sidebar{
+	display: none;
 }

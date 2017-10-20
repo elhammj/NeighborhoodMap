@@ -1,6 +1,6 @@
 <!-- 
 	Name: Elham Jaffar
-	Date: Starting 10/10/2017 To 15/10/2017
+	Date: Starting 10/10/2017 To 20/10/2017
 	Project Name: Neighborhood Map
 	Project File: index.html
 	Project Main Purpose: A single-page application featuring a map of my neighborhood
@@ -38,28 +38,24 @@
 	<nav class="nav navbar-default navbar-fixed-top">
 		<div class="navbar-header">
 				<span id="subject" class="navbar-brand mb-0">Philadelphia Universities and Libraries</span>
+					<button class="navbar-toggler navbar-toggler-center navbar-inverse" type="button" onclick="showSideBar()"> <span class="navbar-toggler-icon"></span> </button>
 		</div>
-				<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
 	</nav>
   	<div class="container-fluid">
 	  	<div class="row" id="all">
 	  		<!-- side bar -->
-	  		<div class="col-md-3">
-		  		<div class="side-list text-md-center" id="sidebar">
-		  			<div class="row">
-		  				<div class="col-md-12">
-							<input type="text" id="textToFilter" data-bind="value: filter, valueUpdate: 'afterkeydown'" class="form-control" placeholder="type text to filter the list">
-						</div>
-		  			</div>
-		  			<ul class="list-group" data-bind="foreach: filteredList">
-		  				<p data-bind="text: title, click: $parent.locationClicked"></p>
-		  			</ul>
+	  		<div class="side-list text-md-center" id="sidebar">
+	  			<div class="row">
+	  				<div class="col-md-12">
+						<input type="text" id="textToFilter" data-bind="value: filter, valueUpdate: 'afterkeydown'" class="form-control" placeholder="type text to filter the list">
+					</div>
 	  			</div>
+	  			<ul class="list-group" data-bind="foreach: filteredList">
+	  				<p data-bind="text: title, click: $parent.locationClicked"></p>
+	  			</ul>
 	  		</div>
 	  		<!-- Map Div -->
-	  		<div class="col-md-9" id="mapCol">
+	  		<div id="mapCol">
 				<div id="map">
 				</div>
 			</div>
@@ -339,8 +335,6 @@
 		var iconUrl = 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF7E72';
 		var infoWindow;
 
-
-
 		/*
 			initMap(): This function to initialize the map and give a center point
 			Also, add controls like zoom, street view and scale
@@ -522,6 +516,20 @@
 		*/
 		function handleError(){
 			alert("There is a problem in loading google map, try gaian !");
+		}
+
+		/* function to control the toggle, to be responsive with small screen */
+		function showSideBar() {
+			if (document.getElementById('sidebar').style.display == 'none'){
+					document.getElementById('sidebar').style.width = "30%";
+				   document.getElementById('sidebar').style.display = "block";
+				   document.getElementById('mapCol').style.width = "70%";
+			}
+			else{
+				   document.getElementById('sidebar').style.display = "none";
+				   document.getElementById('mapCol').style.width = "100%";
+
+			}
 		}
 
    </script>
