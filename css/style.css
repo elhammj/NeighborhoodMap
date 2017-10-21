@@ -23,8 +23,9 @@ text-transform: uppercase;
 }
 ul{
 list-style: none;
-font-size: 12px;
+font-size: 1.5vw;
 text-align: left;
+line-height: 35px;
 padding-left: 30px;
 }
 #map{
@@ -67,7 +68,7 @@ border:1px solid #fff;
 border-radius: 5px;
 margin-top: 10px;
 margin-bottom: 30px;
-font-size: 10px;
+font-size: 1.8vw;
 }
 input[type="text"]:focus{
 outline: none;

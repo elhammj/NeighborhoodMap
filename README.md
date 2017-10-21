@@ -5,6 +5,7 @@ It is a Udacity project to practice MVVM pattern (Model-View-ViewModel) and API.
 ## Main File
 
 * app.js: It has all the major work Knockout and API.
+* jsonObjects.js: It has map style and location details as arrays of objects. 
 * index.html: It has all the DOM.
 * js: It is a directory that has bootstrap.js version 4 for designing and knockout.js.
 * css: It is a directory that has bootstrap.css version 4 for designing and stylesheet that has a custom design
