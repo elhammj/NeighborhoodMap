@@ -47,50 +47,50 @@ function initMap() {
 	(2) animate the marker and show the infowindow when one of the list item is clicked
 */
 var LocationsViewModel = function () {
-	var self = this;
-    self.viewLocations = ko.observableArray(locations);
-    //bind filter to filter text
-		self.filter = ko.observable();
-		//For currentSelected
-		self.currentSelected = ko.observable();
-		
-	  //Use filteredList to get the updated list
-	  self.filteredList = ko.computed(function () {
-	    var copyArr = [];
-	    var filter = self.filter();
-	    if (filter) {
-	    	//Filter the list
-        ko.utils.arrayForEach(self.viewLocations(), function (element) {
-        	var currentTitle = element.title.toLowerCase();
-        	var currentText = filter.toLowerCase();
-        	//Search allows the user to find a locaiton that contains this keyword
-            if (currentTitle.indexOf(currentText) !== -1) { 
-                copyArr.push(element);
-                element.marker.setVisible(true);
-            }
-            else{
-            	element.marker.setVisible(false);//set false to hide the marker during filtering 
-            }
-        });
-	    } 
-	    else {
-        copyArr = self.viewLocations(); //Return the regular markers and locations
-        ko.utils.arrayForEach(self.viewLocations(), function (element) {
-        element.marker.setVisible(true);
-        });
-	    } 
-	    //Indicate which title has been selected and show infowwindow with animating the marker by calling AddAnimation function 
-	    self.locationClicked = function(element) {
-	    	if (element.marker.getAnimation() !== null) {
-          element.marker.setAnimation(null);
-	       }
-         else {
-	        map.panTo(element.marker.position); //Zoom to the current marker, when it is clicked  
-	  			AddInfo(element.marker, infoWindow);
-	  			AddAnimation(element.marker,"FFFFFF");
-	  		}
-	  	};
-	    return copyArr;
+  var self = this;
+  self.viewLocations = ko.observableArray(locations);
+  //bind filter to filter text
+	self.filter = ko.observable();
+	//For currentSelected
+	self.currentSelected = ko.observable();
+	
+  //Use filteredList to get the updated list
+  self.filteredList = ko.computed(function () {
+    var copyArr = [];
+    var filter = self.filter();
+    if (filter) {
+    	//Filter the list
+      ko.utils.arrayForEach(self.viewLocations(), function (element) {
+      	var currentTitle = element.title.toLowerCase();
+      	var currentText = filter.toLowerCase();
+      	//Search allows the user to find a locaiton that contains this keyword
+          if (currentTitle.indexOf(currentText) !== -1) { 
+              copyArr.push(element);
+              element.marker.setVisible(true);
+          }
+          else{
+          	element.marker.setVisible(false);//set false to hide the marker during filtering 
+          }
+      });
+    } 
+    else {
+      copyArr = self.viewLocations(); //Return the regular markers and locations
+      ko.utils.arrayForEach(self.viewLocations(), function (element) {
+      element.marker.setVisible(true);
+      });
+    } 
+    //Indicate which title has been selected and show infowwindow with animating the marker by calling AddAnimation function 
+    self.locationClicked = function(element) {
+    	if (element.marker.getAnimation() !== null) {
+        element.marker.setAnimation(null);
+       }
+       else {
+        map.panTo(element.marker.position); //Zoom to the current marker, when it is clicked  
+  			AddInfo(element.marker, infoWindow);
+  			AddAnimation(element.marker,"FFFFFF");
+  		}
+  	};
+    return copyArr;
 	}); 
 };
 
