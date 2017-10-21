@@ -121,13 +121,14 @@ var AddMarker = function() {
  		var position = locations[i].location;
  		var title = locations[i].title;
  		var formatAddress = locations[i].address;
-      marker = new google.maps.Marker({
+    marker = new google.maps.Marker({
       position:new google.maps.LatLng(position.lat, position.lng), 
       map: map, 
       address: formatAddress,
       title:title, 
       visible: true,
-      icon: iconUrl });
+      icon: iconUrl 
+    });
     marker.addListener("click", AddAnimationAndInfo(marker), false); //Add Info and Animation to each marker
   	locations[i].marker = marker; //Add a marker to the locaiton object as an attribute
   } 
@@ -143,11 +144,11 @@ var AddMarker = function() {
 */
 function AddInfo(marker, infoWindow){	
 	//Here is the link, we just pass the marker title	        	
-	var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title  + '&format=json&callback=wikiCallback';
+  var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title  + '&format=json&callback=wikiCallback';
 		         	
 
 	//Ajax request to retreive data from wikipedia page
-	$.ajax({
+  $.ajax({
 		url: wikiUrl,
 		dataType: "jsonp" }).success(function(response) {
       var wikiLocURL = response[3][0]; //To get first url
