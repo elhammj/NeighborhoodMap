@@ -1,9 +1,6 @@
 
 /*
 	Model part: including objects of location, style and etc
-*/
-
-/* 
 	Variables: (1) default icon for map pin (2) iconUrl (3) decleare infowindow 
 */
 var map;
