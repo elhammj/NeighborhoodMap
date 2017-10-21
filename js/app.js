@@ -89,9 +89,9 @@ var LocationsViewModel = function () {
   			AddInfo(element.marker, infoWindow);
   			AddAnimation(element.marker,"FFFFFF");
   		}
-  	};
+    };
     return copyArr;
-	}); 
+  }); 
 };
 
 
